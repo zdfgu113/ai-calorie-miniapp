@@ -13,7 +13,7 @@ app.use(express.json({ limit: '1mb' }));
 app.get('/health', (req, res) => {
   res.json({
     success: true,
-    message: 'AI卡路里识别后端运行中'
+    message: '小小鱿鱼后端运行中'
   });
 });
 

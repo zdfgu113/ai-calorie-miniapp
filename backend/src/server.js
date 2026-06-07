@@ -6,5 +6,5 @@ app.listen(config.port, () => {
     ? `port ${config.port}`
     : `http://localhost:${config.port}`;
 
-  console.log(`AI卡路里识别后端已启动：${localUrl}`);
+  console.log(`小小鱿鱼后端已启动：${localUrl}`);
 });

@@ -1,9 +1,9 @@
 {
-  "description": "AI卡路里识别 MVP",
+  "description": "小小鱿鱼 MVP",
   "miniprogramRoot": "miniprogram/",
   "compileType": "miniprogram",
   "appid": "wxc4eb8004363740cf",
-  "projectname": "AI卡路里识别",
+  "projectname": "小小鱿鱼",
   "setting": {
     "urlCheck": false,
     "es6": true,
@@ -35,5 +35,6 @@
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "3.16.1"
 }

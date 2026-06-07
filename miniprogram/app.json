@@ -7,7 +7,7 @@
     "pages/settings/settings"
   ],
   "window": {
-    "navigationBarTitleText": "AI卡路里识别",
+    "navigationBarTitleText": "小小鱿鱼",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f7f8fa"
