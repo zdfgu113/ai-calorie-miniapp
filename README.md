@@ -24,6 +24,7 @@ ai-calorie-miniapp/
     pages/settings/        个人设置页
     custom-tab-bar/        自定义底部导航
     assets/tabbar/         底部导航图标素材
+    assets/brand/          小程序头像/品牌图标素材
     utils/                 请求封装
   project.config.json      微信开发者工具项目配置
 ```
@@ -212,6 +213,12 @@ const PROD_API_BASE_URL = 'https://api.example.com';
 
 ```text
 miniprogram/assets/tabbar/LUCIDE_LICENSE.txt
+```
+
+小程序头像素材保存在：
+
+```text
+miniprogram/assets/brand/app-icon-1024.png
 ```
 
 ## 数据存储
