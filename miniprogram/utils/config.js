@@ -1,5 +1,5 @@
 const DEV_API_BASE_URL = 'http://127.0.0.1:3000';
-const PROD_API_BASE_URL = 'https://your-api-domain.example.com';
+const PROD_API_BASE_URL = 'https://ai-calorie-miniapp.onrender.com';
 
 function getApiBaseUrl() {
   try {
