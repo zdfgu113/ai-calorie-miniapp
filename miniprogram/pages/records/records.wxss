@@ -1,0 +1,304 @@
+.summary {
+  padding: 4rpx 0 0;
+  border-radius: 28rpx;
+  background: transparent;
+}
+
+.summary-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.summary-title {
+  color: #17211d;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.summary-date {
+  margin-top: 6rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.refresh-button {
+  width: 132rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  margin: 0;
+  color: #128a45;
+  background: #eef6ee;
+  font-size: 26rpx;
+  border-radius: 22rpx;
+}
+
+.remaining-card {
+  margin-top: 28rpx;
+  padding: 28rpx;
+  border-radius: 32rpx;
+  background: #17211d;
+}
+
+.remaining-card.over-card {
+  background: #7f2a1d;
+}
+
+.remaining-label {
+  color: #f8f0dd;
+  font-size: 24rpx;
+}
+
+.remaining-number {
+  color: #f8d276;
+  font-size: 58rpx;
+  font-weight: 800;
+}
+
+.remaining-unit {
+  margin-left: 8rpx;
+  color: #f8f0dd;
+  font-size: 24rpx;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.summary-item {
+  padding: 18rpx 8rpx;
+  text-align: center;
+  border-top: 1rpx solid #e4ddcc;
+  border-bottom: 1rpx solid #e4ddcc;
+}
+
+.summary-number {
+  color: #17211d;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.summary-number.over {
+  color: #b43b25;
+}
+
+.summary-label {
+  margin-top: 6rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.progress {
+  height: 14rpx;
+  margin-top: 26rpx;
+  overflow: hidden;
+  border-radius: 999rpx;
+  background: #e8e0d0;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: #128a45;
+}
+
+.progress-caption {
+  margin-top: 10rpx;
+  color: #687267;
+  font-size: 22rpx;
+  text-align: right;
+}
+
+.empty {
+  margin-top: 40rpx;
+  padding: 40rpx;
+  color: #687267;
+  text-align: center;
+  background: #fffdf7;
+  border-radius: 28rpx;
+}
+
+.record-list {
+  margin-top: 24rpx;
+}
+
+.record-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  border-radius: 28rpx;
+  background: #fffdf7;
+  border: 1rpx solid #e9e1d2;
+}
+
+.record-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-name {
+  color: #17211d;
+  font-size: 30rpx;
+  font-weight: 800;
+  word-break: break-all;
+}
+
+.record-weight {
+  margin-top: 8rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.record-actions {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.record-action {
+  width: 104rpx;
+  height: 52rpx;
+  line-height: 52rpx;
+  margin: 0;
+  padding: 0;
+  font-size: 23rpx;
+  border-radius: 18rpx;
+}
+
+.edit-action {
+  color: #128a45;
+  background: #eef6ee;
+}
+
+.delete-action {
+  color: #b43b25;
+  background: #fff2ed;
+}
+
+.record-side {
+  max-width: 330rpx;
+  text-align: right;
+}
+
+.record-calories {
+  color: #128a45;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.record-macros {
+  margin-top: 8rpx;
+  color: #687267;
+  font-size: 22rpx;
+  line-height: 1.4;
+}
+
+.edit-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(23, 33, 29, 0.42);
+}
+
+.edit-sheet {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 86vh;
+  padding: 30rpx 28rpx 48rpx;
+  overflow-y: auto;
+  border-radius: 34rpx 34rpx 0 0;
+  background: #fffdf7;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.edit-title {
+  color: #17211d;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.edit-subtitle {
+  margin-top: 6rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.edit-close {
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 60rpx;
+  margin: 0;
+  padding: 0;
+  color: #687267;
+  font-size: 42rpx;
+  border-radius: 50%;
+  background: #f1eadc;
+}
+
+.form-field {
+  margin-top: 18rpx;
+}
+
+.field-label {
+  margin-bottom: 10rpx;
+  color: #687267;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.field-input,
+.field-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  color: #17211d;
+  font-size: 28rpx;
+  border: 1rpx solid #e4ddcc;
+  border-radius: 22rpx;
+  background: #f8f4eb;
+}
+
+.field-input {
+  height: 78rpx;
+  padding: 0 22rpx;
+}
+
+.field-textarea {
+  min-height: 132rpx;
+  padding: 20rpx 22rpx;
+  line-height: 1.45;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 18rpx;
+}
+
+.edit-save {
+  height: 88rpx;
+  line-height: 88rpx;
+  margin-top: 28rpx;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  border-radius: 28rpx;
+  background: #128a45;
+}

@@ -1,0 +1,63 @@
+<view class="page index-page">
+  <view class="today-card">
+    <view class="today-head">
+      <view>
+        <view class="today-kicker">Today</view>
+        <view class="today-title">今日热量</view>
+      </view>
+      <button class="mini-button" bindtap="goSettings">设置</button>
+    </view>
+
+    <view class="remaining-line">
+      <view>
+        <view class="remaining-label">{{remainingCalories < 0 ? '已超过目标' : '今日还可吃'}}</view>
+        <view>
+          <text class="remaining-number">{{absRemainingCalories}}</text>
+          <text class="remaining-unit">kcal</text>
+        </view>
+      </view>
+      <view class="target-pill">目标 {{dailyGoalCalories}}</view>
+    </view>
+
+    <view class="home-progress">
+      <view class="home-progress-bar" style="width: {{progressPercent}}%;"></view>
+    </view>
+
+    <view class="today-grid">
+      <view>
+        <view class="grid-number">{{totalCalories}}</view>
+        <view class="grid-label">已摄入</view>
+      </view>
+      <view>
+        <view class="grid-number">{{recordCount}}</view>
+        <view class="grid-label">记录数</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="center-stage">
+    <view class="hero">
+      <view class="hero-copy">
+        <view class="eyebrow">Food Lens</view>
+        <view class="title">拍一下，估个热量</view>
+        <view class="subtitle">识别食物、热量和三大营养素</view>
+      </view>
+      <view class="hero-meter">
+        <view class="meter-number">{{dailyGoalCalories}}</view>
+        <view class="meter-label">目标 kcal</view>
+      </view>
+    </view>
+
+    <view class="action-panel">
+      <button class="primary-button" loading="{{preparingImage}}" disabled="{{preparingImage}}" bindtap="handleChooseImage">
+        {{preparingImage ? '压缩图片中...' : '拍照识别'}}
+      </button>
+      <view class="shortcut-row">
+        <button class="ghost-button shortcut-button" bindtap="goRecords">今日记录</button>
+        <button class="ghost-button shortcut-button" bindtap="goHistory">历史趋势</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+</view>

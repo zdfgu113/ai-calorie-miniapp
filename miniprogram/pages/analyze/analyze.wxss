@@ -1,0 +1,404 @@
+.analyze-page {
+  padding-bottom: 72rpx;
+}
+
+.analyze-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.header-kicker {
+  color: #b26b24;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.header-title {
+  margin-top: 6rpx;
+  color: #17211d;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.retake-button {
+  width: 120rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  margin: 0;
+  padding: 0;
+  color: #128a45;
+  font-size: 26rpx;
+  font-weight: 700;
+  border-radius: 22rpx;
+  background: #eef6ee;
+}
+
+.preview-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 34rpx;
+  background: #fffdf7;
+  border: 1rpx solid #e9e1d2;
+}
+
+.preview-image {
+  display: block;
+  width: 100%;
+  height: 430rpx;
+}
+
+.preview-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 33, 29, 0.42);
+}
+
+.scan-line {
+  position: absolute;
+  left: 44rpx;
+  right: 44rpx;
+  top: 72rpx;
+  height: 5rpx;
+  border-radius: 999rpx;
+  background: #f8d276;
+}
+
+.scan-text {
+  padding: 16rpx 26rpx;
+  color: #ffffff;
+  font-size: 27rpx;
+  border-radius: 24rpx;
+  background: rgba(23, 33, 29, 0.74);
+}
+
+.friendly-error {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 30rpx;
+  background: #fff2ed;
+}
+
+.error-title {
+  color: #b43b25;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.error-text {
+  margin-top: 10rpx;
+  color: #7f2a1d;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.error-button {
+  height: 76rpx;
+  line-height: 76rpx;
+  margin-top: 20rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  border-radius: 24rpx;
+  background: #b43b25;
+}
+
+.result-area {
+  margin-top: 24rpx;
+}
+
+.swipe-tip {
+  margin: 0 8rpx 12rpx;
+  color: #687267;
+  font-size: 23rpx;
+}
+
+.swipe-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 34rpx;
+}
+
+.swipe-action {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 176rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #17211d;
+}
+
+.slide-edit-button {
+  width: 112rpx;
+  height: 112rpx;
+  line-height: 112rpx;
+  margin: 0;
+  padding: 0;
+  color: #f8d276;
+  font-size: 28rpx;
+  font-weight: 800;
+  border-radius: 50%;
+  background: rgba(248, 210, 118, 0.14);
+}
+
+.result-card {
+  position: relative;
+  padding: 30rpx;
+  border-radius: 34rpx;
+  background: #fffdf7;
+  border: 1rpx solid #e9e1d2;
+  transition: transform 160ms ease;
+}
+
+.section-kicker {
+  margin-bottom: 20rpx;
+  color: #b26b24;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.food-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.food-name {
+  color: #17211d;
+  font-size: 38rpx;
+  font-weight: 800;
+  word-break: break-all;
+}
+
+.food-weight {
+  margin-top: 8rpx;
+  color: #687267;
+  font-size: 26rpx;
+}
+
+.calorie-block {
+  min-width: 150rpx;
+  text-align: right;
+}
+
+.calorie-number {
+  color: #128a45;
+  font-size: 52rpx;
+  font-weight: 800;
+}
+
+.calorie-unit {
+  margin-left: 4rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.macro-list {
+  margin-top: 28rpx;
+}
+
+.macro-row {
+  margin-top: 20rpx;
+}
+
+.macro-row:first-child {
+  margin-top: 0;
+}
+
+.macro-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.macro-label {
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.macro-value {
+  color: #17211d;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.macro-track {
+  height: 16rpx;
+  margin-top: 10rpx;
+  overflow: hidden;
+  border-radius: 999rpx;
+  background: #ece7dc;
+}
+
+.macro-fill {
+  height: 100%;
+  border-radius: 999rpx;
+}
+
+.protein .macro-fill {
+  background: #128a45;
+}
+
+.fat .macro-fill {
+  background: #d08728;
+}
+
+.carbs .macro-fill {
+  background: #2d7da1;
+}
+
+.advice {
+  margin-top: 28rpx;
+  padding: 22rpx;
+  border-radius: 28rpx;
+  background: #eef6ee;
+}
+
+.advice-title {
+  color: #128a45;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.advice-text {
+  margin-top: 8rpx;
+  color: #334139;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.save-button {
+  height: 88rpx;
+  line-height: 88rpx;
+  margin-top: 24rpx;
+  color: #ffffff;
+  background: #17211d;
+  font-size: 30rpx;
+  font-weight: 700;
+  border-radius: 28rpx;
+}
+
+.save-button[disabled] {
+  color: #ffffff;
+  background: #9ca3af;
+}
+
+.edit-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(23, 33, 29, 0.42);
+}
+
+.edit-sheet {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 86vh;
+  padding: 30rpx 28rpx 48rpx;
+  overflow-y: auto;
+  border-radius: 34rpx 34rpx 0 0;
+  background: #fffdf7;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.edit-title {
+  color: #17211d;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.edit-subtitle {
+  margin-top: 6rpx;
+  color: #687267;
+  font-size: 24rpx;
+}
+
+.edit-close {
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 60rpx;
+  margin: 0;
+  padding: 0;
+  color: #687267;
+  font-size: 42rpx;
+  border-radius: 50%;
+  background: #f1eadc;
+}
+
+.form-field {
+  margin-top: 18rpx;
+}
+
+.field-label {
+  margin-bottom: 10rpx;
+  color: #687267;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.field-input,
+.field-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  color: #17211d;
+  font-size: 28rpx;
+  border: 1rpx solid #e4ddcc;
+  border-radius: 22rpx;
+  background: #f8f4eb;
+}
+
+.field-input {
+  height: 78rpx;
+  padding: 0 22rpx;
+}
+
+.field-textarea {
+  min-height: 132rpx;
+  padding: 20rpx 22rpx;
+  line-height: 1.45;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 18rpx;
+}
+
+.edit-save {
+  height: 88rpx;
+  line-height: 88rpx;
+  margin-top: 28rpx;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  border-radius: 28rpx;
+  background: #128a45;
+}

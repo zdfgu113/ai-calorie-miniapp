@@ -1,0 +1,140 @@
+<view class="page analyze-page">
+  <view class="analyze-header">
+    <view>
+      <view class="header-kicker">Food Scan</view>
+      <view class="header-title">本次识别</view>
+    </view>
+    <button class="retake-button" bindtap="chooseAgain">重拍</button>
+  </view>
+
+  <view wx:if="{{imagePath}}" class="preview-card">
+    <image class="preview-image" src="{{imagePath}}" mode="aspectFill"></image>
+    <view wx:if="{{loading}}" class="preview-mask">
+      <view class="scan-line"></view>
+      <view class="scan-text">正在分析图片</view>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="friendly-error">
+    <view class="error-title">识别没有成功</view>
+    <view class="error-text">{{error}}</view>
+    <button class="error-button" bindtap="chooseAgain">重新拍一张</button>
+  </view>
+
+  <view wx:if="{{result}}" class="result-area">
+    <view class="swipe-tip">向左滑动结果卡片可编辑</view>
+
+    <view class="swipe-wrap">
+      <view class="swipe-action">
+        <button class="slide-edit-button" bindtap="openEdit">编辑</button>
+      </view>
+
+      <view
+        class="result-card"
+        style="transform: translateX({{resultOffset}}px);"
+        bindtouchstart="handleResultTouchStart"
+        bindtouchmove="handleResultTouchMove"
+        bindtouchend="handleResultTouchEnd"
+      >
+        <view class="section-kicker">识别结果</view>
+        <view class="card-header">
+          <view class="food-block">
+            <view class="food-name">{{result.foodName}}</view>
+            <view class="food-weight">估算重量 {{result.estimatedWeight}}</view>
+          </view>
+          <view class="calorie-block">
+            <text class="calorie-number">{{result.calories}}</text>
+            <text class="calorie-unit">kcal</text>
+          </view>
+        </view>
+
+        <view class="macro-list">
+          <view class="macro-row protein">
+            <view class="macro-row-top">
+              <text class="macro-label">蛋白质</text>
+              <text class="macro-value">{{result.protein}}g</text>
+            </view>
+            <view class="macro-track">
+              <view class="macro-fill" style="width: {{proteinPercent}}%;"></view>
+            </view>
+          </view>
+          <view class="macro-row fat">
+            <view class="macro-row-top">
+              <text class="macro-label">脂肪</text>
+              <text class="macro-value">{{result.fat}}g</text>
+            </view>
+            <view class="macro-track">
+              <view class="macro-fill" style="width: {{fatPercent}}%;"></view>
+            </view>
+          </view>
+          <view class="macro-row carbs">
+            <view class="macro-row-top">
+              <text class="macro-label">碳水</text>
+              <text class="macro-value">{{result.carbs}}g</text>
+            </view>
+            <view class="macro-track">
+              <view class="macro-fill" style="width: {{carbsPercent}}%;"></view>
+            </view>
+          </view>
+        </view>
+
+        <view class="advice">
+          <view class="advice-title">减脂建议</view>
+          <view class="advice-text">{{result.dietAdvice}}</view>
+        </view>
+      </view>
+    </view>
+
+    <button class="save-button" loading="{{saving}}" disabled="{{saved || saving}}" bindtap="handleSaveRecord">
+      {{saved ? '已保存到今日记录' : saving ? '保存中...' : '保存到今日记录'}}
+    </button>
+  </view>
+
+  <view wx:if="{{editing}}" class="edit-mask" catchtap="closeEdit">
+    <view class="edit-sheet" catchtap="noop">
+      <view class="edit-header">
+        <view>
+          <view class="edit-title">编辑识别结果</view>
+          <view class="edit-subtitle">保存前先把估算调准</view>
+        </view>
+        <button class="edit-close" bindtap="closeEdit">×</button>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">食物名称</view>
+        <input class="field-input" value="{{editForm.foodName}}" data-field="foodName" bindinput="handleEditInput" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">估算重量</view>
+        <input class="field-input" value="{{editForm.estimatedWeight}}" data-field="estimatedWeight" bindinput="handleEditInput" />
+      </view>
+
+      <view class="form-grid">
+        <view class="form-field">
+          <view class="field-label">热量 kcal</view>
+          <input class="field-input" type="digit" value="{{editForm.calories}}" data-field="calories" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">蛋白 g</view>
+          <input class="field-input" type="digit" value="{{editForm.protein}}" data-field="protein" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">脂肪 g</view>
+          <input class="field-input" type="digit" value="{{editForm.fat}}" data-field="fat" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">碳水 g</view>
+          <input class="field-input" type="digit" value="{{editForm.carbs}}" data-field="carbs" bindinput="handleEditInput" />
+        </view>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">减脂建议</view>
+        <textarea class="field-textarea" value="{{editForm.dietAdvice}}" data-field="dietAdvice" bindinput="handleEditInput" maxlength="180"></textarea>
+      </view>
+
+      <button class="edit-save" bindtap="saveEditResult">应用修改</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,108 @@
+<view class="page">
+  <view class="summary">
+    <view class="summary-top">
+      <view>
+        <view class="summary-title">今日记录</view>
+        <view class="summary-date">{{date}}</view>
+      </view>
+      <button class="refresh-button" loading="{{loading}}" bindtap="loadTodayRecords">刷新</button>
+    </view>
+
+    <view class="remaining-card {{remainingCalories < 0 ? 'over-card' : ''}}">
+      <view class="remaining-label">{{remainingCalories < 0 ? '已超过目标' : '今日还可吃'}}</view>
+      <view>
+        <text class="remaining-number">{{absRemainingCalories}}</text>
+        <text class="remaining-unit">kcal</text>
+      </view>
+    </view>
+
+    <view class="summary-grid">
+      <view class="summary-item">
+        <view class="summary-number">{{totalCalories}}</view>
+        <view class="summary-label">已摄入</view>
+      </view>
+      <view class="summary-item">
+        <view class="summary-number">{{dailyGoalCalories}}</view>
+        <view class="summary-label">目标</view>
+      </view>
+      <view class="summary-item">
+        <view class="summary-number {{remainingCalories < 0 ? 'over' : ''}}">{{remainingCalories}}</view>
+        <view class="summary-label">剩余</view>
+      </view>
+    </view>
+
+    <view class="progress">
+      <view class="progress-bar" style="width: {{progressPercent}}%;"></view>
+    </view>
+    <view class="progress-caption">{{progressPercent}}% / {{dailyGoalCalories}} kcal</view>
+  </view>
+
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+
+  <view wx:if="{{isEmpty && !loading}}" class="empty">今天还没有记录</view>
+
+  <view class="record-list">
+    <view wx:for="{{records}}" wx:key="id" class="record-card">
+      <view class="record-main">
+        <view class="record-name">{{item.foodName}}</view>
+        <view class="record-weight">{{item.timeText}} · {{item.estimatedWeight}}</view>
+        <view class="record-actions">
+          <button class="record-action edit-action" data-id="{{item.id}}" bindtap="openEdit">编辑</button>
+          <button class="record-action delete-action" loading="{{deletingId == item.id}}" data-id="{{item.id}}" bindtap="confirmDelete">删除</button>
+        </view>
+      </view>
+      <view class="record-side">
+        <view class="record-calories">{{item.calories}} kcal</view>
+        <view class="record-macros">蛋白 {{item.protein}}g · 脂肪 {{item.fat}}g · 碳水 {{item.carbs}}g</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{editing}}" class="edit-mask" catchtap="closeEdit">
+    <view class="edit-sheet" catchtap="noop">
+      <view class="edit-header">
+        <view>
+          <view class="edit-title">编辑记录</view>
+          <view class="edit-subtitle">调整 AI 估算结果</view>
+        </view>
+        <button class="edit-close" bindtap="closeEdit">×</button>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">食物名称</view>
+        <input class="field-input" value="{{editForm.foodName}}" data-field="foodName" bindinput="handleEditInput" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">估算重量</view>
+        <input class="field-input" value="{{editForm.estimatedWeight}}" data-field="estimatedWeight" bindinput="handleEditInput" />
+      </view>
+
+      <view class="form-grid">
+        <view class="form-field">
+          <view class="field-label">热量 kcal</view>
+          <input class="field-input" type="digit" value="{{editForm.calories}}" data-field="calories" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">蛋白 g</view>
+          <input class="field-input" type="digit" value="{{editForm.protein}}" data-field="protein" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">脂肪 g</view>
+          <input class="field-input" type="digit" value="{{editForm.fat}}" data-field="fat" bindinput="handleEditInput" />
+        </view>
+        <view class="form-field">
+          <view class="field-label">碳水 g</view>
+          <input class="field-input" type="digit" value="{{editForm.carbs}}" data-field="carbs" bindinput="handleEditInput" />
+        </view>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">减脂建议</view>
+        <textarea class="field-textarea" value="{{editForm.dietAdvice}}" data-field="dietAdvice" bindinput="handleEditInput" maxlength="180"></textarea>
+      </view>
+
+      <button class="edit-save" loading="{{savingEdit}}" bindtap="saveEdit">保存修改</button>
+    </view>
+  </view>
+</view>

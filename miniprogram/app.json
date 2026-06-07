@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/analyze/analyze",
+    "pages/records/records",
+    "pages/history/history",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarTitleText": "AI卡路里识别",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f8fa"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#6b7280",
+    "selectedColor": "#128a45",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "今日"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "历史"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 60000,
+    "uploadFile": 60000
+  },
+  "sitemapLocation": "sitemap.json"
+}

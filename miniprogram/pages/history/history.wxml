@@ -1,0 +1,64 @@
+<view class="page history-page">
+  <view class="history-header">
+    <view>
+      <view class="header-kicker">Trend</view>
+      <view class="header-title">最近 7 天趋势</view>
+    </view>
+  </view>
+
+  <view class="trend-card">
+    <view class="chart">
+      <view wx:for="{{trendItems}}" wx:key="date" class="chart-item">
+        <view class="bar-box">
+          <view class="bar" style="height: {{item.barPercent}}%;"></view>
+        </view>
+        <view class="bar-value">{{item.totalCalories}}</view>
+        <view class="bar-label">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="range-tabs">
+    <button
+      wx:for="{{ranges}}"
+      wx:key="key"
+      class="range-tab {{activeRange == item.key ? 'active' : ''}}"
+      data-range="{{item.key}}"
+      bindtap="switchRange"
+    >
+      {{item.label}}
+    </button>
+  </view>
+
+  <view class="summary-card">
+    <view class="summary-label">{{label}}摄入</view>
+    <view>
+      <text class="summary-number">{{totalCalories}}</text>
+      <text class="summary-unit">kcal</text>
+    </view>
+    <view class="summary-sub">{{startDate}} 至 {{endDate}}</view>
+    <view class="summary-grid">
+      <view>
+        <view class="grid-number">{{targetCalories}}</view>
+        <view class="grid-label">目标</view>
+      </view>
+      <view>
+        <view class="grid-number {{remainingCalories < 0 ? 'over' : ''}}">{{remainingCalories}}</view>
+        <view class="grid-label">剩余</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+  <view wx:if="{{isEmpty && !loading}}" class="empty">这个时间段还没有记录</view>
+
+  <view class="history-list">
+    <view wx:for="{{records}}" wx:key="id" class="history-record">
+      <view>
+        <view class="record-name">{{item.foodName}}</view>
+        <view class="record-meta">{{item.timeText}} · {{item.estimatedWeight}}</view>
+      </view>
+      <view class="record-calories">{{item.calories}} kcal</view>
+    </view>
+  </view>
+</view>

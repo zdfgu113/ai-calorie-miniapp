@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: ai-calorie-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    disk:
+      name: sqlite-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: "production"
+      - key: PORT
+        value: "10000"
+      - key: AI_MOCK
+        value: "false"
+      - key: AI_API_BASE_URL
+        value: "https://ark.cn-beijing.volces.com/api/v3"
+      - key: AI_MODEL
+        value: "doubao-seed-2-0-lite-260428"
+      - key: AI_RESPONSE_FORMAT
+        value: "none"
+      - key: AI_THINKING
+        value: "disabled"
+      - key: AI_TIMEOUT_MS
+        value: "60000"
+      - key: MAX_UPLOAD_SIZE_MB
+        value: "8"
+      - key: SQLITE_DB_PATH
+        value: "/var/data/app.sqlite"
+      - key: AI_API_KEY
+        sync: false

@@ -1,0 +1,205 @@
+.settings-header {
+  margin-bottom: 24rpx;
+}
+
+.header-kicker {
+  color: #b26b24;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.header-title {
+  margin-top: 6rpx;
+  color: #17211d;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.header-subtitle {
+  margin-top: 8rpx;
+  color: #687267;
+  font-size: 26rpx;
+}
+
+.settings-card {
+  margin-bottom: 22rpx;
+  padding: 26rpx;
+  border: 1rpx solid #e4ddcc;
+  border-radius: 32rpx;
+  background: #fffdf7;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #eee6d8;
+}
+
+.field-row:first-child {
+  padding-top: 0;
+}
+
+.field-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.field-title {
+  color: #17211d;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.field-desc {
+  margin-top: 6rpx;
+  color: #687267;
+  font-size: 23rpx;
+}
+
+.number-control {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.number-control button {
+  width: 58rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  margin: 0;
+  padding: 0;
+  color: #17211d;
+  font-size: 34rpx;
+  font-weight: 800;
+  border-radius: 50%;
+  background: #efe7d8;
+}
+
+.number-control input {
+  width: 116rpx;
+  height: 62rpx;
+  color: #f8d276;
+  font-size: 30rpx;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 20rpx;
+  background: #17211d;
+}
+
+.number-control.compact input {
+  width: 100rpx;
+}
+
+.section-title {
+  color: #17211d;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.goal-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.goal-option {
+  min-height: 120rpx;
+  padding: 18rpx 12rpx;
+  border-radius: 24rpx;
+  background: #efe7d8;
+}
+
+.goal-option.active {
+  background: #17211d;
+}
+
+.goal-label {
+  color: #17211d;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.goal-option.active .goal-label {
+  color: #f8d276;
+}
+
+.goal-desc {
+  margin-top: 8rpx;
+  color: #687267;
+  font-size: 21rpx;
+  line-height: 1.3;
+}
+
+.goal-option.active .goal-desc {
+  color: #f8f0dd;
+}
+
+.recommend-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-bottom: 22rpx;
+  padding: 28rpx;
+  border-radius: 32rpx;
+  background: #17211d;
+}
+
+.recommend-kicker {
+  color: #f8f0dd;
+  font-size: 24rpx;
+}
+
+.recommend-number {
+  color: #f8d276;
+  font-size: 58rpx;
+  font-weight: 800;
+}
+
+.recommend-unit {
+  margin-left: 8rpx;
+  color: #f8f0dd;
+  font-size: 24rpx;
+}
+
+.recommend-desc {
+  margin-top: 8rpx;
+  color: #fffdf7;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.maintenance-text {
+  margin-top: 8rpx;
+  color: #f8f0dd;
+  font-size: 22rpx;
+}
+
+.apply-recommend {
+  flex: 0 0 112rpx;
+  width: 112rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  margin: 0;
+  padding: 0;
+  color: #17211d;
+  font-size: 26rpx;
+  font-weight: 800;
+  border-radius: 24rpx;
+  background: #f8d276;
+}
+
+.save-settings {
+  height: 92rpx;
+  line-height: 92rpx;
+  margin-top: 26rpx;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 800;
+  border-radius: 30rpx;
+  background: #128a45;
+}

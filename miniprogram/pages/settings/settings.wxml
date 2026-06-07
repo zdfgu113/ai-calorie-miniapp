@@ -1,0 +1,78 @@
+<view class="page settings-page">
+  <view class="settings-header">
+    <view class="header-kicker">Profile</view>
+    <view class="header-title">设置</view>
+    <view class="header-subtitle">这些信息会影响目标和记录展示</view>
+  </view>
+
+  <view class="settings-card">
+    <view class="field-row">
+      <view>
+        <view class="field-title">每日目标热量</view>
+        <view class="field-desc">用于计算今日剩余热量</view>
+      </view>
+      <view class="number-control">
+        <button data-field="dailyGoalCalories" data-step="-100" bindtap="adjustNumber">-</button>
+        <input type="number" value="{{dailyGoalCalories}}" data-field="dailyGoalCalories" bindinput="handleInput" />
+        <button data-field="dailyGoalCalories" data-step="100" bindtap="adjustNumber">+</button>
+      </view>
+    </view>
+
+    <view class="field-row">
+      <view>
+        <view class="field-title">身高</view>
+        <view class="field-desc">单位 cm</view>
+      </view>
+      <view class="number-control compact">
+        <button data-field="heightCm" data-step="-1" bindtap="adjustNumber">-</button>
+        <input type="number" value="{{heightCm}}" data-field="heightCm" bindinput="handleInput" />
+        <button data-field="heightCm" data-step="1" bindtap="adjustNumber">+</button>
+      </view>
+    </view>
+
+    <view class="field-row">
+      <view>
+        <view class="field-title">体重</view>
+        <view class="field-desc">单位 kg</view>
+      </view>
+      <view class="number-control compact">
+        <button data-field="weightKg" data-step="-0.5" bindtap="adjustNumber">-</button>
+        <input type="digit" value="{{weightKg}}" data-field="weightKg" bindinput="handleInput" />
+        <button data-field="weightKg" data-step="0.5" bindtap="adjustNumber">+</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-card goal-card">
+    <view class="section-title">减脂目标</view>
+    <view class="goal-options">
+      <view
+        wx:for="{{goalOptions}}"
+        wx:key="key"
+        class="goal-option {{fatLossGoal == item.key ? 'active' : ''}}"
+        data-goal="{{item.key}}"
+        bindtap="selectGoal"
+      >
+        <view class="goal-label">{{item.label}}</view>
+        <view class="goal-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="recommend-card">
+    <view>
+      <view class="recommend-kicker">推荐每日摄入</view>
+      <view>
+        <text class="recommend-number">{{recommendedDailyCalories}}</text>
+        <text class="recommend-unit">kcal</text>
+      </view>
+      <view class="recommend-desc">{{recommendationText}}</view>
+      <view class="maintenance-text">估算维持热量约 {{estimatedMaintenanceCalories}} kcal</view>
+    </view>
+    <button class="apply-recommend" bindtap="applyRecommendedGoal">应用</button>
+  </view>
+
+  <view wx:if="{{error}}" class="error">{{error}}</view>
+
+  <button class="save-settings" loading="{{saving}}" bindtap="saveSettings">保存设置</button>
+</view>

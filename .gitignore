@@ -1,0 +1,13 @@
+node_modules/
+npm-debug.log*
+.env
+backend/.env
+backend/data/*.json
+backend/data/*.sqlite
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
+!backend/data/.gitkeep
+project.private.config.json
+miniprogram/project.private.config.json
+.DS_Store
+dist/
