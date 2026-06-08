@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
 const foodRoutes = require('./routes/foodRoutes');
 const recordsRoutes = require('./routes/recordsRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
@@ -17,6 +18,7 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.use('/api', authRoutes);
 app.use('/api', foodRoutes);
 app.use('/api/records', recordsRoutes);
 app.use('/api/settings', settingsRoutes);

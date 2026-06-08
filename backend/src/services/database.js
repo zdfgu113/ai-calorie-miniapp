@@ -104,6 +104,7 @@ async function initializeDatabase(db) {
 
     CREATE TABLE IF NOT EXISTS records (
       id TEXT PRIMARY KEY,
+      user_id TEXT,
       food_name TEXT NOT NULL,
       estimated_weight TEXT NOT NULL,
       calories INTEGER NOT NULL DEFAULT 0,
@@ -124,14 +125,53 @@ async function initializeDatabase(db) {
       value TEXT NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      openid TEXT NOT NULL UNIQUE,
+      unionid TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      last_login_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS sessions (
+      token TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+
+    CREATE TABLE IF NOT EXISTS user_settings (
+      user_id TEXT NOT NULL,
+      key TEXT NOT NULL,
+      value TEXT NOT NULL,
+      PRIMARY KEY (user_id, key),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
     CREATE TABLE IF NOT EXISTS meta (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
     );
   `);
 
+  await ensureColumn(db, 'records', 'user_id', 'TEXT');
+  await db.exec('CREATE INDEX IF NOT EXISTS idx_records_user_date ON records(user_id, date);');
   await seedDefaultSettings(db);
   await migrateLegacyJson(db);
+}
+
+async function ensureColumn(db, tableName, columnName, columnDefinition) {
+  const columns = await db.all(`PRAGMA table_info(${tableName})`);
+  const exists = columns.some((column) => column.name === columnName);
+
+  if (!exists) {
+    await db.run(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinition}`);
+  }
 }
 
 async function seedDefaultSettings(db) {
@@ -180,11 +220,12 @@ async function importLegacyRecords(db) {
     for (const record of records) {
       await db.run(
         `INSERT OR IGNORE INTO records (
-          id, food_name, estimated_weight, calories, protein, fat, carbs,
+          id, user_id, food_name, estimated_weight, calories, protein, fat, carbs,
           diet_advice, date, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           record.id,
+          null,
           record.foodName,
           record.estimatedWeight,
           Number(record.calories || 0),

@@ -11,9 +11,11 @@ const DEFAULT_SETTINGS = {
 
 const FAT_LOSS_GOALS = ['mild', 'steady', 'aggressive'];
 
-async function getSettings() {
+async function getSettings(userId = null) {
   const db = await getDb();
-  const rows = await db.all('SELECT key, value FROM settings');
+  const rows = userId
+    ? await db.all('SELECT key, value FROM user_settings WHERE user_id = ?', [userId])
+    : await db.all('SELECT key, value FROM settings');
   const settings = { ...DEFAULT_SETTINGS };
 
   rows.forEach((row) => {
@@ -27,14 +29,14 @@ async function getSettings() {
   return normalizeSettings(settings);
 }
 
-async function updateDailyGoal(input) {
+async function updateDailyGoal(input, userId = null) {
   return updateSettings({
     dailyGoalCalories: input.dailyGoalCalories
-  });
+  }, userId);
 }
 
-async function updateSettings(input) {
-  const current = await getSettings();
+async function updateSettings(input, userId = null) {
+  const current = await getSettings(userId);
   const nextSettings = normalizeSettings({
     ...current,
     ...pickDefined(input, ['dailyGoalCalories', 'heightCm', 'weightKg', 'fatLossGoal'])
@@ -44,10 +46,17 @@ async function updateSettings(input) {
 
   const db = await getDb();
   for (const [key, value] of Object.entries(nextSettings)) {
-    await db.run(
-      'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
-      [key, JSON.stringify(value)]
-    );
+    if (userId) {
+      await db.run(
+        'INSERT OR REPLACE INTO user_settings (user_id, key, value) VALUES (?, ?, ?)',
+        [userId, key, JSON.stringify(value)]
+      );
+    } else {
+      await db.run(
+        'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+        [key, JSON.stringify(value)]
+      );
+    }
   }
 
   return nextSettings;

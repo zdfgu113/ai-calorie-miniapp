@@ -5,11 +5,13 @@ const { normalizeFoodAnalysis } = require('../utils/foodSchema');
 const { getSettings } = require('./settingsStore');
 const { getDb } = require('./database');
 
-async function addRecord(input) {
+async function addRecord(userId, input) {
+  ensureUserId(userId);
   const food = normalizeFoodAnalysis(input);
   const now = new Date();
   const record = {
     id: randomUUID(),
+    userId,
     ...food,
     date: getLocalDateKey(now),
     createdAt: now.toISOString(),
@@ -19,23 +21,24 @@ async function addRecord(input) {
   const db = await getDb();
   await db.run(
     `INSERT INTO records (
-      id, food_name, estimated_weight, calories, protein, fat, carbs,
+      id, user_id, food_name, estimated_weight, calories, protein, fat, carbs,
       diet_advice, date, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     toRecordParams(record)
   );
 
   return record;
 }
 
-async function updateRecord(id, input) {
+async function updateRecord(userId, id, input) {
+  ensureUserId(userId);
   if (!id) {
     throw new ApiError(400, '缺少记录 ID', 'RECORD_ID_REQUIRED');
   }
 
   const food = normalizeFoodAnalysis(input);
   const db = await getDb();
-  const existing = await getRecordById(id);
+  const existing = await getRecordById(userId, id);
 
   if (!existing) {
     throw new ApiError(404, '没有找到这条饮食记录', 'RECORD_NOT_FOUND');
@@ -57,7 +60,7 @@ async function updateRecord(id, input) {
       carbs = ?,
       diet_advice = ?,
       updated_at = ?
-    WHERE id = ?`,
+    WHERE user_id = ? AND id = ?`,
     [
       updatedRecord.foodName,
       updatedRecord.estimatedWeight,
@@ -67,6 +70,7 @@ async function updateRecord(id, input) {
       updatedRecord.carbs,
       updatedRecord.dietAdvice,
       updatedRecord.updatedAt,
+      userId,
       id
     ]
   );
@@ -74,31 +78,33 @@ async function updateRecord(id, input) {
   return updatedRecord;
 }
 
-async function deleteRecord(id) {
+async function deleteRecord(userId, id) {
+  ensureUserId(userId);
   if (!id) {
     throw new ApiError(400, '缺少记录 ID', 'RECORD_ID_REQUIRED');
   }
 
   const db = await getDb();
-  const existing = await getRecordById(id);
+  const existing = await getRecordById(userId, id);
 
   if (!existing) {
     throw new ApiError(404, '没有找到这条饮食记录', 'RECORD_NOT_FOUND');
   }
 
-  await db.run('DELETE FROM records WHERE id = ?', [id]);
+  await db.run('DELETE FROM records WHERE user_id = ? AND id = ?', [userId, id]);
   return existing;
 }
 
-async function getTodaySummary() {
-  return getRangeSummary('today');
+async function getHistorySummary(userId, range = 'today') {
+  return getRangeSummary(userId, range);
 }
 
-async function getHistorySummary(range = 'today') {
-  return getRangeSummary(range);
+async function getTodaySummary(userId) {
+  return getRangeSummary(userId, 'today');
 }
 
-async function getTrend(days = 7) {
+async function getTrend(userId, days = 7) {
+  ensureUserId(userId);
   const dateKeys = getRecentDateKeys(days);
   const startDate = dateKeys[0];
   const endDate = dateKeys[dateKeys.length - 1];
@@ -106,9 +112,9 @@ async function getTrend(days = 7) {
   const rows = await db.all(
     `SELECT date, SUM(calories) AS totalCalories
      FROM records
-     WHERE date BETWEEN ? AND ?
+     WHERE user_id = ? AND date BETWEEN ? AND ?
      GROUP BY date`,
-    [startDate, endDate]
+    [userId, startDate, endDate]
   );
   const totalsByDate = new Map(rows.map((row) => [row.date, Number(row.totalCalories || 0)]));
   const maxCalories = Math.max(...dateKeys.map((date) => totalsByDate.get(date) || 0), 1);
@@ -131,11 +137,12 @@ async function getTrend(days = 7) {
   };
 }
 
-async function getRangeSummary(range) {
+async function getRangeSummary(userId, range) {
+  ensureUserId(userId);
   const dateRange = getDateRange(range);
-  const records = await listRecordsByDateRange(dateRange.startDate, dateRange.endDate);
+  const records = await listRecordsByDateRange(userId, dateRange.startDate, dateRange.endDate);
   const totalCalories = records.reduce((sum, record) => sum + Number(record.calories || 0), 0);
-  const settings = await getSettings();
+  const settings = await getSettings(userId);
   const dailyGoalCalories = settings.dailyGoalCalories;
   const daysCount = countDaysInclusive(dateRange.startDate, dateRange.endDate);
   const targetCalories = dailyGoalCalories * daysCount;
@@ -152,28 +159,29 @@ async function getRangeSummary(range) {
   };
 }
 
-async function listRecordsByDateRange(startDate, endDate) {
+async function listRecordsByDateRange(userId, startDate, endDate) {
   const db = await getDb();
   const rows = await db.all(
     `SELECT *
      FROM records
-     WHERE date BETWEEN ? AND ?
+     WHERE user_id = ? AND date BETWEEN ? AND ?
      ORDER BY created_at DESC`,
-    [startDate, endDate]
+    [userId, startDate, endDate]
   );
 
   return rows.map(fromRecordRow);
 }
 
-async function getRecordById(id) {
+async function getRecordById(userId, id) {
   const db = await getDb();
-  const row = await db.get('SELECT * FROM records WHERE id = ?', [id]);
+  const row = await db.get('SELECT * FROM records WHERE user_id = ? AND id = ?', [userId, id]);
   return row ? fromRecordRow(row) : null;
 }
 
 function fromRecordRow(row) {
   return {
     id: row.id,
+    userId: row.user_id,
     foodName: row.food_name,
     estimatedWeight: row.estimated_weight,
     calories: Number(row.calories || 0),
@@ -190,6 +198,7 @@ function fromRecordRow(row) {
 function toRecordParams(record) {
   return [
     record.id,
+    record.userId,
     record.foodName,
     record.estimatedWeight,
     record.calories,
@@ -201,6 +210,12 @@ function toRecordParams(record) {
     record.createdAt,
     record.updatedAt
   ];
+}
+
+function ensureUserId(userId) {
+  if (!userId) {
+    throw new ApiError(401, '请先微信登录', 'LOGIN_REQUIRED');
+  }
 }
 
 function countDaysInclusive(startDate, endDate) {

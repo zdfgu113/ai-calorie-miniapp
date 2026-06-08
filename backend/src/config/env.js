@@ -20,6 +20,14 @@ const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   dailyCalorieGoal: toNumber(process.env.DAILY_CALORIE_GOAL, 1800),
   sqliteDbPath: process.env.SQLITE_DB_PATH || '',
+  auth: {
+    sessionTtlDays: toNumber(process.env.AUTH_SESSION_TTL_DAYS, 30)
+  },
+  wechat: {
+    appId: process.env.WECHAT_APPID || '',
+    appSecret: process.env.WECHAT_APP_SECRET || '',
+    mock: toBoolean(process.env.WECHAT_LOGIN_MOCK, false)
+  },
   upload: {
     maxSizeBytes: maxUploadSizeMb * 1024 * 1024
   },

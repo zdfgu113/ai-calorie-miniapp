@@ -8,7 +8,7 @@ const {
 } = require('../services/recordStore');
 
 async function createRecord(req, res) {
-  const record = await addRecord(req.body);
+  const record = await addRecord(req.user.id, req.body);
 
   res.status(201).json({
     success: true,
@@ -17,7 +17,7 @@ async function createRecord(req, res) {
 }
 
 async function getTodayRecords(req, res) {
-  const summary = await getTodaySummary();
+  const summary = await getTodaySummary(req.user.id);
 
   res.json({
     success: true,
@@ -26,7 +26,7 @@ async function getTodayRecords(req, res) {
 }
 
 async function getHistoryRecords(req, res) {
-  const summary = await getHistorySummary(req.query.range || 'today');
+  const summary = await getHistorySummary(req.user.id, req.query.range || 'today');
 
   res.json({
     success: true,
@@ -35,7 +35,7 @@ async function getHistoryRecords(req, res) {
 }
 
 async function getRecordsTrend(req, res) {
-  const trend = await getTrend(req.query.days || 7);
+  const trend = await getTrend(req.user.id, req.query.days || 7);
 
   res.json({
     success: true,
@@ -44,7 +44,7 @@ async function getRecordsTrend(req, res) {
 }
 
 async function patchRecord(req, res) {
-  const record = await updateRecord(req.params.id, req.body);
+  const record = await updateRecord(req.user.id, req.params.id, req.body);
 
   res.json({
     success: true,
@@ -53,7 +53,7 @@ async function patchRecord(req, res) {
 }
 
 async function removeRecord(req, res) {
-  const record = await deleteRecord(req.params.id);
+  const record = await deleteRecord(req.user.id, req.params.id);
 
   res.json({
     success: true,

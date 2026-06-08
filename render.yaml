@@ -33,3 +33,9 @@ services:
         value: "/var/data/app.sqlite"
       - key: AI_API_KEY
         sync: false
+      - key: WECHAT_APPID
+        sync: false
+      - key: WECHAT_APP_SECRET
+        sync: false
+      - key: AUTH_SESSION_TTL_DAYS
+        value: "30"

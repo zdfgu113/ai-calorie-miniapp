@@ -1,7 +1,7 @@
 const { getSettings, updateDailyGoal, updateSettings } = require('../services/settingsStore');
 
 async function getDailyGoal(req, res) {
-  const settings = await getSettings();
+  const settings = await getSettings(req.user.id);
 
   res.json({
     success: true,
@@ -10,7 +10,7 @@ async function getDailyGoal(req, res) {
 }
 
 async function setDailyGoal(req, res) {
-  const settings = await updateDailyGoal(req.body);
+  const settings = await updateDailyGoal(req.body, req.user.id);
 
   res.json({
     success: true,
@@ -19,7 +19,7 @@ async function setDailyGoal(req, res) {
 }
 
 async function getAllSettings(req, res) {
-  const settings = await getSettings();
+  const settings = await getSettings(req.user.id);
 
   res.json({
     success: true,
@@ -28,7 +28,7 @@ async function getAllSettings(req, res) {
 }
 
 async function setAllSettings(req, res) {
-  const settings = await updateSettings(req.body);
+  const settings = await updateSettings(req.body, req.user.id);
 
   res.json({
     success: true,

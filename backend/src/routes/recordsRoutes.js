@@ -8,8 +8,11 @@ const {
   removeRecord
 } = require('../controllers/recordsController');
 const { asyncHandler } = require('../utils/asyncHandler');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
+
+router.use(asyncHandler(requireAuth));
 
 router.post('/', asyncHandler(createRecord));
 router.get('/today', asyncHandler(getTodayRecords));

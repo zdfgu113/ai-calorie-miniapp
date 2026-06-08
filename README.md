@@ -79,8 +79,8 @@ AI_RESPONSE_FORMAT=none
 
 1. 打开微信开发者工具。
 2. 导入本项目根目录 `ai-calorie-miniapp`。
-3. 如果只是本机调试，保持 `miniprogram/utils/config.js` 的 `API_BASE_URL = 'http://127.0.0.1:3000'`。
-4. 如果用手机预览，把 `API_BASE_URL` 改成电脑局域网 IP，例如 `http://192.168.1.10:3000`。
+3. 当前小程序默认走线上 HTTPS 后端：`https://ai-calorie-miniapp.onrender.com`。
+4. 如果要改回本地后端，把 `miniprogram/utils/config.js` 里的 `USE_LOCAL_API_IN_DEVTOOLS` 改成 `true`，并先启动 `backend`。
 5. 微信开发者工具本地调试时，可勾选“不校验合法域名”。真实发布时需要把后端部署到 HTTPS，并在小程序后台配置 `request` 和 `uploadFile` 合法域名。
 
 ## HTTPS 部署建议
@@ -91,6 +91,8 @@ Render 部署时需要在环境变量里填写：
 
 ```env
 AI_API_KEY=你的豆包/火山方舟 API Key
+WECHAT_APPID=你的小程序 AppID
+WECHAT_APP_SECRET=你的小程序 AppSecret
 ```
 
 `render.yaml` 已经配置：
@@ -101,6 +103,7 @@ AI_MODEL=doubao-seed-2-0-lite-260428
 AI_RESPONSE_FORMAT=none
 AI_THINKING=disabled
 SQLITE_DB_PATH=/var/data/app.sqlite
+AUTH_SESSION_TTL_DAYS=30
 ```
 
 部署成功后，把 `miniprogram/utils/config.js` 里的：
@@ -126,6 +129,12 @@ const PROD_API_BASE_URL = 'https://api.example.com';
 
 ### POST `/api/analyze-food`
 
+需要请求头：
+
+```text
+Authorization: Bearer 后端登录 token
+```
+
 表单上传字段名：`image`
 
 返回：
@@ -144,6 +153,18 @@ const PROD_API_BASE_URL = 'https://api.example.com';
   }
 }
 ```
+
+### POST `/api/auth/login`
+
+微信登录。小程序端用 `wx.login` 拿到 `code` 后传给后端：
+
+```json
+{
+  "code": "wx.login 返回的 code"
+}
+```
+
+后端返回会话 token，前端会自动保存并用于后续请求。
 
 ### POST `/api/records`
 
@@ -202,7 +223,7 @@ const PROD_API_BASE_URL = 'https://api.example.com';
 
 ## MVP 边界
 
-- 不包含登录系统。
+- 已包含微信登录，但不包含手机号登录、复杂用户资料和好友关系。
 - 不包含支付。
 - 本地 SQLite 适合 MVP 和本地开发，后续可以替换为正式云数据库。
 - 热量和营养值来自图片估算，只适合作为饮食记录参考。

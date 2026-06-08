@@ -1,24 +1,35 @@
 const { API_BASE_URL } = require('./config');
+const { clearSession, ensureLogin, getAuthHeader } = require('./auth');
 
 function uploadFoodImage(filePath) {
   return new Promise((resolve, reject) => {
-    wx.uploadFile({
-      url: `${API_BASE_URL}/api/analyze-food`,
-      filePath,
-      name: 'image',
-      timeout: 60000,
-      success(res) {
-        const body = parseResponse(res);
-        if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
-          resolve(body.data);
-          return;
-        }
-        reject(new Error(body.message || '识别失败，请重试'));
-      },
-      fail(error) {
-        reject(new Error(error.errMsg || '图片上传失败，请检查后端服务'));
-      }
-    });
+    ensureLogin()
+      .then((session) => {
+        wx.uploadFile({
+          url: `${API_BASE_URL}/api/analyze-food`,
+          filePath,
+          name: 'image',
+          timeout: 60000,
+          header: getAuthHeader(session.token),
+          success(res) {
+            const body = parseResponse(res);
+            if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
+              resolve(body.data);
+              return;
+            }
+
+            if (res.statusCode === 401) {
+              clearSession();
+            }
+
+            reject(new Error(body.message || '识别失败，请重试'));
+          },
+          fail(error) {
+            reject(new Error(formatNetworkError(error, '图片上传失败，请检查网络或稍后重试')));
+          }
+        });
+      })
+      .catch(reject);
   });
 }
 
@@ -100,27 +111,55 @@ function updateDailyGoal(dailyGoalCalories) {
 
 function request(options) {
   return new Promise((resolve, reject) => {
-    wx.request({
-      url: `${API_BASE_URL}${options.url}`,
-      method: options.method || 'GET',
-      data: options.data || {},
-      timeout: 60000,
-      header: {
-        'Content-Type': 'application/json'
-      },
-      success(res) {
-        const body = parseResponse(res);
-        if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
-          resolve(body.data);
-          return;
-        }
-        reject(new Error(body.message || `请求失败：${res.statusCode}`));
-      },
-      fail(error) {
-        reject(new Error(error.errMsg || '请求失败，请检查后端服务'));
-      }
-    });
+    ensureLogin()
+      .then((session) => {
+        wx.request({
+          url: `${API_BASE_URL}${options.url}`,
+          method: options.method || 'GET',
+          data: options.data || {},
+          timeout: 60000,
+          header: {
+            'Content-Type': 'application/json',
+            ...getAuthHeader(session.token)
+          },
+          success(res) {
+            const body = parseResponse(res);
+            if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
+              resolve(body.data);
+              return;
+            }
+
+            if (res.statusCode === 401) {
+              clearSession();
+            }
+
+            reject(new Error(body.message || `请求失败：${res.statusCode}`));
+          },
+          fail(error) {
+            reject(new Error(formatNetworkError(error, '请求失败，请检查网络或稍后重试')));
+          }
+        });
+      })
+      .catch(reject);
   });
+}
+
+function formatNetworkError(error, fallbackMessage) {
+  const errMsg = error && error.errMsg ? error.errMsg : '';
+
+  if (errMsg.includes('ERR_CONNECTION_REFUSED') || errMsg.includes('-102')) {
+    return '连接后端失败，请确认网络正常后重试';
+  }
+
+  if (errMsg.includes('timeout')) {
+    return '请求超时，请稍后再试';
+  }
+
+  if (errMsg.includes('fail')) {
+    return fallbackMessage;
+  }
+
+  return errMsg || fallbackMessage;
 }
 
 function parseResponse(res) {

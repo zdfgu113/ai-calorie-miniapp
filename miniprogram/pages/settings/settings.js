@@ -1,4 +1,5 @@
 const { getSettings, updateSettings } = require('../../utils/request');
+const { ensureLogin, getCurrentUser } = require('../../utils/auth');
 
 const GOAL_OPTIONS = [
   { key: 'mild', label: '轻度减脂', desc: '更容易坚持' },
@@ -16,6 +17,9 @@ Page({
     recommendedDailyCalories: 0,
     estimatedMaintenanceCalories: 0,
     recommendationText: '',
+    loggedIn: false,
+    userLabel: '未登录',
+    authLoading: false,
     loading: false,
     saving: false,
     error: ''
@@ -23,6 +27,7 @@ Page({
 
   onShow() {
     this.syncTabBar();
+    this.syncAuthState();
     this.loadSettings();
   },
 
@@ -32,11 +37,41 @@ Page({
     }
   },
 
+  syncAuthState() {
+    const user = getCurrentUser();
+
+    this.setData({
+      loggedIn: !!user,
+      userLabel: user && user.id ? `用户 ${maskUserId(user.id)}` : '未登录'
+    });
+  },
+
+  async loginWithWechat() {
+    if (this.data.authLoading) return;
+
+    this.setData({ authLoading: true, error: '' });
+
+    try {
+      await ensureLogin(true);
+      this.syncAuthState();
+      await this.loadSettings();
+      wx.showToast({
+        title: '登录成功',
+        icon: 'success'
+      });
+    } catch (error) {
+      this.setData({ error: error.message || '微信登录失败' });
+    } finally {
+      this.setData({ authLoading: false });
+    }
+  },
+
   async loadSettings() {
     this.setData({ loading: true, error: '' });
 
     try {
       const settings = await getSettings();
+      this.syncAuthState();
       this.setData({
         dailyGoalCalories: String(settings.dailyGoalCalories || 1800),
         heightCm: String(settings.heightCm || 170),
@@ -190,6 +225,14 @@ function buildRecommendation(input) {
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
+}
+
+function maskUserId(userId) {
+  if (!userId || userId.length <= 8) {
+    return userId || '';
+  }
+
+  return `${userId.slice(0, 4)}...${userId.slice(-4)}`;
 }
 
 function validateSettings(settings) {

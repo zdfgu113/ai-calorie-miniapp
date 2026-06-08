@@ -4,6 +4,7 @@ const { config } = require('../config/env');
 const { analyzeFood } = require('../controllers/foodController');
 const { asyncHandler } = require('../utils/asyncHandler');
 const { ApiError } = require('../utils/apiError');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -21,6 +22,6 @@ const upload = multer({
   }
 });
 
-router.post('/analyze-food', upload.single('image'), asyncHandler(analyzeFood));
+router.post('/analyze-food', asyncHandler(requireAuth), upload.single('image'), asyncHandler(analyzeFood));
 
 module.exports = router;
