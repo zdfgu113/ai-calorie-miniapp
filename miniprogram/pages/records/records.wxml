@@ -63,7 +63,7 @@
       <view class="edit-header">
         <view>
           <view class="edit-title">编辑记录</view>
-          <view class="edit-subtitle">调整 AI 估算结果</view>
+          <view class="edit-subtitle">调整识别结果</view>
         </view>
         <button class="edit-close" bindtap="closeEdit">×</button>
       </view>

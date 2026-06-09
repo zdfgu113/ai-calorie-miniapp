@@ -87,7 +87,6 @@
 
   <view class="disclaimer-card">
     <view class="section-title">免责声明</view>
-    <view class="disclaimer-text">小小鱿鱼的识别结果由 AI 根据图片估算，食物名称、重量、热量和营养素可能存在误差。</view>
     <view class="disclaimer-text">本小程序仅用于日常饮食记录和减脂参考，不构成医疗、营养诊断或治疗建议。如有疾病、孕期、运动员备赛等特殊情况，请咨询专业医生或营养师。</view>
   </view>
 </view>
