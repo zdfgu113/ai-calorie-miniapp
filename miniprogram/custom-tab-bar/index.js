@@ -36,7 +36,15 @@ Component({
 
       if (selected === this.data.selected) return;
 
-      wx.switchTab({ url: path });
+      wx.switchTab({
+        url: path,
+        fail() {
+          wx.showToast({
+            title: '页面打开失败',
+            icon: 'none'
+          });
+        }
+      });
       this.setData({ selected });
     }
   }

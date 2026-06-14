@@ -55,7 +55,7 @@ Page({
   },
 
   handleChooseImage() {
-    if (this.data.loading) return;
+    if (this.data.preparingImage) return;
 
     wx.chooseMedia({
       count: 1,
@@ -72,8 +72,10 @@ Page({
 
         try {
           const compressed = await compressImage(file.tempFilePath, { quality: 70 });
-          wx.navigateTo({
-            url: `/pages/analyze/analyze?imagePath=${encodeURIComponent(compressed.filePath)}`
+          await navigateTo(`/pages/analyze/analyze?imagePath=${encodeURIComponent(compressed.filePath)}`);
+        } catch (error) {
+          this.setData({
+            error: error.message || '打开识别页面失败，请重试'
           });
         } finally {
           this.setData({ preparingImage: false });
@@ -87,20 +89,39 @@ Page({
   },
 
   goRecords() {
-    wx.switchTab({
-      url: '/pages/records/records'
-    });
+    this.switchToTab('/pages/records/records');
   },
 
   goHistory() {
-    wx.switchTab({
-      url: '/pages/history/history'
-    });
+    this.switchToTab('/pages/history/history');
   },
 
   goSettings() {
+    this.switchToTab('/pages/settings/settings');
+  },
+
+  switchToTab(url) {
     wx.switchTab({
-      url: '/pages/settings/settings'
+      url,
+      fail: () => {
+        this.setData({ error: '页面打开失败，请重新点击一次' });
+        wx.showToast({
+          title: '页面打开失败',
+          icon: 'none'
+        });
+      }
     });
   }
 });
+
+function navigateTo(url) {
+  return new Promise((resolve, reject) => {
+    wx.navigateTo({
+      url,
+      success: resolve,
+      fail() {
+        reject(new Error('打开识别页面失败，请重试'));
+      }
+    });
+  });
+}

@@ -77,9 +77,16 @@ Page({
           saved: false
         });
 
-        const compressed = await compressImage(file.tempFilePath, { quality: 70 });
-        this.setData({ imagePath: compressed.filePath });
-        this.analyzeImage(compressed.filePath);
+        try {
+          const compressed = await compressImage(file.tempFilePath, { quality: 70 });
+          this.setData({ imagePath: compressed.filePath });
+          this.analyzeImage(compressed.filePath);
+        } catch (error) {
+          this.setData({
+            loading: false,
+            error: error.message || '处理图片失败，请重新选择'
+          });
+        }
       },
       fail: (error) => {
         if (error.errMsg && error.errMsg.includes('cancel')) return;

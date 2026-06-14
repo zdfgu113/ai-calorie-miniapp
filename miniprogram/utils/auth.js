@@ -38,7 +38,7 @@ function syncWechatIdentity() {
           data: {
             code: loginRes.code
           },
-          timeout: 60000,
+          timeout: 12000,
           header: {
             'Content-Type': 'application/json'
           },
