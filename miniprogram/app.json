@@ -41,5 +41,6 @@
     "request": 60000,
     "uploadFile": 60000
   },
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }
