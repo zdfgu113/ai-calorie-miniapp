@@ -3,33 +3,24 @@ const { clearSession, ensureLogin, getAuthHeader } = require('./auth');
 
 function uploadFoodImage(filePath) {
   return new Promise((resolve, reject) => {
-    ensureLogin()
-      .then((session) => {
-        wx.uploadFile({
-          url: `${API_BASE_URL}/api/analyze-food`,
-          filePath,
-          name: 'image',
-          timeout: 60000,
-          header: getAuthHeader(session.token),
-          success(res) {
-            const body = parseResponse(res);
-            if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
-              resolve(body.data);
-              return;
-            }
+    wx.uploadFile({
+      url: `${API_BASE_URL}/api/analyze-food`,
+      filePath,
+      name: 'image',
+      timeout: 60000,
+      success(res) {
+        const body = parseResponse(res);
+        if (res.statusCode >= 200 && res.statusCode < 300 && body.success) {
+          resolve(body.data);
+          return;
+        }
 
-            if (res.statusCode === 401) {
-              clearSession();
-            }
-
-            reject(new Error(body.message || '识别失败，请重试'));
-          },
-          fail(error) {
-            reject(new Error(formatNetworkError(error, '图片上传失败，请检查网络或稍后重试')));
-          }
-        });
-      })
-      .catch(reject);
+        reject(new Error(body.message || '识别失败，请重试'));
+      },
+      fail(error) {
+        reject(new Error(formatNetworkError(error, '图片上传失败，请检查网络或稍后重试')));
+      }
+    });
   });
 }
 

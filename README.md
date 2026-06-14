@@ -129,12 +129,6 @@ const PROD_API_BASE_URL = 'https://api.example.com';
 
 ### POST `/api/analyze-food`
 
-需要请求头：
-
-```text
-Authorization: Bearer 后端登录 token
-```
-
 表单上传字段名：`image`
 
 返回：
@@ -156,7 +150,7 @@ Authorization: Bearer 后端登录 token
 
 ### POST `/api/auth/login`
 
-微信登录。小程序端用 `wx.login` 拿到 `code` 后传给后端：
+静默身份同步。小程序端用 `wx.login` 拿到 `code` 后传给后端：
 
 ```json
 {
@@ -164,7 +158,7 @@ Authorization: Bearer 后端登录 token
 }
 ```
 
-后端返回会话 token，前端会自动保存并用于后续请求。
+后端返回会话 token，前端会自动保存并用于保存记录、历史记录和设置接口。页面不展示登录入口。
 
 ### POST `/api/records`
 
@@ -223,7 +217,7 @@ Authorization: Bearer 后端登录 token
 
 ## MVP 边界
 
-- 已包含微信登录，但不包含手机号登录、复杂用户资料和好友关系。
+- 已包含静默身份同步，用于区分不同用户的数据；不包含手机号登录、复杂用户资料和好友关系。
 - 不包含支付。
 - 本地 SQLite 适合 MVP 和本地开发，后续可以替换为正式云数据库。
 - 热量和营养值来自图片估算，只适合作为饮食记录参考。

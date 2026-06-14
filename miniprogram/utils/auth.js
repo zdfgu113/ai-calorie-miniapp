@@ -15,7 +15,7 @@ function ensureLogin(force = false) {
     return loginPromise;
   }
 
-  loginPromise = loginWithWechat()
+  loginPromise = syncWechatIdentity()
     .finally(() => {
       loginPromise = null;
     });
@@ -23,12 +23,12 @@ function ensureLogin(force = false) {
   return loginPromise;
 }
 
-function loginWithWechat() {
+function syncWechatIdentity() {
   return new Promise((resolve, reject) => {
     wx.login({
       success(loginRes) {
         if (!loginRes.code) {
-          reject(new Error('微信登录失败，请稍后重试'));
+          reject(new Error('身份同步失败，请稍后重试'));
           return;
         }
 
@@ -51,7 +51,7 @@ function loginWithWechat() {
               return;
             }
 
-            reject(new Error(body.message || '微信登录失败'));
+            reject(new Error(body.message || '身份同步失败'));
           },
           fail(error) {
             reject(new Error(formatLoginError(error)));
@@ -59,7 +59,7 @@ function loginWithWechat() {
         });
       },
       fail() {
-        reject(new Error('微信登录失败，请检查微信状态'));
+        reject(new Error('身份同步失败，请检查微信状态'));
       }
     });
   });
@@ -127,10 +127,10 @@ function formatLoginError(error) {
   const errMsg = error && error.errMsg ? error.errMsg : '';
 
   if (errMsg.includes('timeout')) {
-    return '微信登录超时，请稍后重试';
+    return '身份同步超时，请稍后重试';
   }
 
-  return '微信登录失败，请检查网络后重试';
+  return '身份同步失败，请检查网络后重试';
 }
 
 module.exports = {

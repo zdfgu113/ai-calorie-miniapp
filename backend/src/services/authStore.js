@@ -5,7 +5,7 @@ const { getDb } = require('./database');
 
 async function loginWithWechatCode(code) {
   if (!code) {
-    throw new ApiError(400, '缺少微信登录 code', 'WECHAT_CODE_REQUIRED');
+    throw new ApiError(400, '缺少身份校验 code', 'WECHAT_CODE_REQUIRED');
   }
 
   const wxSession = await exchangeWechatCode(code);
@@ -24,7 +24,7 @@ async function loginWithWechatCode(code) {
 
 async function verifySessionToken(token) {
   if (!token) {
-    throw new ApiError(401, '请先微信登录', 'LOGIN_REQUIRED');
+    throw new ApiError(401, '身份状态已失效，请重试', 'LOGIN_REQUIRED');
   }
 
   const db = await getDb();
@@ -37,12 +37,12 @@ async function verifySessionToken(token) {
   );
 
   if (!row) {
-    throw new ApiError(401, '登录已失效，请重新登录', 'SESSION_INVALID');
+    throw new ApiError(401, '身份状态已失效，请重试', 'SESSION_INVALID');
   }
 
   if (new Date(row.expires_at).getTime() <= Date.now()) {
     await db.run('DELETE FROM sessions WHERE token = ?', [token]);
-    throw new ApiError(401, '登录已过期，请重新登录', 'SESSION_EXPIRED');
+    throw new ApiError(401, '身份状态已过期，请重试', 'SESSION_EXPIRED');
   }
 
   return {
@@ -60,7 +60,7 @@ async function exchangeWechatCode(code) {
   }
 
   if (!config.wechat.appId || !config.wechat.appSecret) {
-    throw new ApiError(500, '后端未配置微信登录参数', 'WECHAT_CONFIG_MISSING');
+    throw new ApiError(500, '后端未配置身份校验参数', 'WECHAT_CONFIG_MISSING');
   }
 
   const url = new URL('https://api.weixin.qq.com/sns/jscode2session');
@@ -75,14 +75,14 @@ async function exchangeWechatCode(code) {
   if (!response.ok || body.errcode) {
     throw new ApiError(
       502,
-      body.errmsg || '微信登录校验失败',
+      body.errmsg || '身份校验失败',
       'WECHAT_LOGIN_FAILED',
       body
     );
   }
 
   if (!body.openid) {
-    throw new ApiError(502, '微信登录未返回 openid', 'WECHAT_OPENID_MISSING', body);
+    throw new ApiError(502, '身份校验未返回用户标识', 'WECHAT_OPENID_MISSING', body);
   }
 
   return {

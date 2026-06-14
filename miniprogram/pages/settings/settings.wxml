@@ -5,15 +5,6 @@
     <view class="header-subtitle">这些信息会影响目标和记录展示</view>
   </view>
 
-  <view class="auth-card">
-    <view>
-      <view class="auth-title">微信登录</view>
-      <view class="auth-desc">{{loggedIn ? '已登录，记录会按微信账号分开保存' : '登录后可区分你和朋友的饮食记录'}}</view>
-      <view class="auth-user">{{userLabel}}</view>
-    </view>
-    <button class="auth-button" loading="{{authLoading}}" bindtap="loginWithWechat">{{loggedIn ? '重新登录' : '登录'}}</button>
-  </view>
-
   <view class="settings-card">
     <view class="field-row">
       <view>

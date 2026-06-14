@@ -214,7 +214,7 @@ function toRecordParams(record) {
 
 function ensureUserId(userId) {
   if (!userId) {
-    throw new ApiError(401, '请先微信登录', 'LOGIN_REQUIRED');
+    throw new ApiError(401, '身份状态已失效，请重试', 'LOGIN_REQUIRED');
   }
 }
 
